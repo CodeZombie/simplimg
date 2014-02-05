@@ -89,7 +89,7 @@ if($filesize >= 786432) {
 				font-size:13px;
 			}
 			.descript{
-				color:green;
+				color:#0f0;
 			}
 		</style>
 	</head>
