@@ -5,11 +5,21 @@
 ##
 
 //define the directory where images will be stored, relative to the position of this file.
-DEFINE("IMAGE_DIRECTORY","images/");
+$IMAGE_DIRECTORY = "images/";
+
+//repair $IMAGE_DIRECTORY if it's not entered properly
+if(substr($IMAGE_DIRECTORY,-1) !== "/"){
+	$IMAGE_DIRECTORY = $IMAGE_DIRECTORY . "/";
+}
 
 //check if the header contains an image request
 if(!isset($_GET['i'])) {
-	die("no file selected");
+	die("No file selected");
+}
+
+//check if directory exists
+if(!file_exists($IMAGE_DIRECTORY)) {
+	die("Setup error: Directory does not exist");
 }
 
 //retrieve the requested file-name
@@ -17,7 +27,7 @@ $requested_filename = $_GET['i'];
 
 //##retrieve an array consisting of all possible files in our image directory
 //read all files in the directory
-$files_in_directory = scandir(IMAGE_DIRECTORY);
+$files_in_directory = scandir($IMAGE_DIRECTORY);
 
 //strip the . and .. results which are not image files
 foreach($files_in_directory as $key => $value) {
@@ -43,13 +53,13 @@ foreach($files_in_directory as $file) {
 
 //if no match was found
 if($failed_to_match) {
-	die("file does not exist");
+	die("File does not exist");
 }
 
 //prepare output data
 $data = array();
 $data["filename"] = $requested_filename;
-$data["filepath"] = IMAGE_DIRECTORY . $requested_filename;
+$data["filepath"] = $IMAGE_DIRECTORY . $requested_filename;
 $data["lastmodified"] = date('M jS, Y \a\t g:ia', filemtime($data["filepath"]));
 $data["dimensions"] = getimagesize($data["filepath"])[0] . "x" . getimagesize($data["filepath"])[1];
 
